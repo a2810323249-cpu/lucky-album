@@ -1,15 +1,19 @@
-import { notes } from './content.js';
+import { notes } from './content.js?v=lucky-media-2';
 
 const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia?.('(hover: hover) and (pointer: fine)');
 const chapters = [
   { id: 'all', name: '全部片段', subtitle: 'Lucky 的小日子', ids: null },
-  { id: 'first', name: '初见 Lucky', subtitle: '航空箱里的小眼神', ids: ['lucky-in-the-carrier','lucky-looking-up','lucky-exploring'] },
+  { id: 'together', name: '相伴时光', subtitle: '怀里与沙发旁的小日子', ids: ['lucky-holding-a-finger','lucky-and-the-blue-feather','lucky-by-the-sofa-cover'] },
+  { id: 'window', name: '窗边小家', subtitle: '黄色小窝与窗边一角', ids: ['lucky-in-the-yellow-bed','lucky-in-the-litter-box','lucky-window-corner'] },
+  { id: 'first', name: '初见 Lucky', subtitle: '航空箱里的小眼神', ids: ['lucky-in-the-carrier','lucky-looking-up','lucky-looking-up-at-the-carrier-door','lucky-turning-in-the-carrier','lucky-exploring'] },
   { id: 'bird', name: '和小鸟', subtitle: '一位黄绿色的小邻居', ids: ['lucky-watching-the-bird','lucky-and-a-small-neighbor'] },
   { id: 'rest', name: '吃饭与小睡', subtitle: '小脑袋，小爪爪', ids: ['lucky-at-the-bowl','lucky-sleeping-on-the-back','lucky-little-paws','lucky-hiding-the-face'] },
 ];
 const escape = value => String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const number = value => String(value).padStart(2,'0');
+const videoCount = notes.filter(note=>note.video).length;
+const photoCount = notes.length-videoCount;
 let chapter = 'all';
 let page = 0;
 let opened = !!reduced?.matches;
@@ -51,7 +55,7 @@ function cover() {
   return `<div class="cover-shell"><div class="cover-face"><div class="cover-copy">
     <p class="cover-edition">THE LITTLE ALBUM · 2026</p><h2 class="cover-title">Lucky<span>的日常</span></h2><p class="cover-description">有 Lucky 的普通日子。</p>
     <button class="cover-open" type="button" data-book-action="open">翻开相册</button><button class="cover-skip" type="button" data-book-action="skip">直接浏览</button><a class="cover-character-link" href="#/character">认识虚拟 Lucky <span aria-hidden="true">↗</span></a>
-    <p class="cover-count">${number(notes.length)} 个片段 · 05 段视频 · 04 张照片</p>
+    <p class="cover-count">${number(notes.length)} 个片段 · ${number(videoCount)} 段视频 · ${number(photoCount)} 张照片</p>
     </div><div class="cover-collage" aria-hidden="true"><div class="cover-photo cover-photo-main"><img src="${portrait.photo}" alt="" width="${portrait.width}" height="${portrait.height}" draggable="false"><span>hello, Lucky.</span></div><div class="cover-photo cover-photo-character"><img src="assets/lucky-character.png" alt="" width="1024" height="1536" draggable="false"><span>另一个 Lucky</span></div></div>
     </div></div>`;
 }
@@ -62,7 +66,7 @@ export function renderAlbum() {
   page=Math.min(page,pages-1);
   const visible=items.slice(page*4,page*4+4);
   return `<section class="album-experience" aria-label="Lucky 的贴纸相册">
-    <div class="album-heading"><div><p class="eyebrow">A LITTLE COLLECTION</p><h1>Lucky 的小相册</h1></div><span class="album-total">5 段视频 · 4 张照片</span></div>
+    <div class="album-heading"><div><p class="eyebrow">A LITTLE COLLECTION</p><h1>Lucky 的小相册</h1></div><span class="album-total">${videoCount} 段视频 · ${photoCount} 张照片</span></div>
     <a class="character-teaser" href="#/character"><span class="character-teaser-art"><img src="assets/lucky-sticker-hello.png" alt="" width="1254" height="1254"></span><span class="character-teaser-copy"><strong>另一个 Lucky</strong><span>来认识它的虚拟形象和小表情</span></span><span class="character-teaser-arrow" aria-hidden="true">↗</span></a>
     <div class="chapter-tabs" role="group" aria-label="相册章节">${chapters.map((item,index)=>`<button type="button" class="chapter-tab" data-chapter="${item.id}" aria-pressed="${item.id===chapter}"><span class="chapter-index">${number(index)}</span>${escape(item.name)}</button>`).join('')}</div>
     <div class="book-stage ${opened?'is-open':'is-closed'} ${opening?'is-opening':''}" tabindex="0" aria-label="相册第 ${page+1} 页，共 ${pages} 页，使用方向键翻页">

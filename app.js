@@ -1,5 +1,5 @@
-import { site, notes } from './content.js';
-import { renderAlbum, mountAlbum, destroyAlbum } from './album.js?v=lucky-character-1';
+import { site, notes } from './content.js?v=lucky-media-2';
+import { renderAlbum, mountAlbum, destroyAlbum } from './album.js?v=lucky-media-2';
 
 const main = document.querySelector('main');
 const dialog = document.querySelector('.lightbox');
