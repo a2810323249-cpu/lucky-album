@@ -1,9 +1,10 @@
-import { notes } from './content.js?v=lucky-media-2';
+import { notes } from './content.js?v=lucky-photos-3';
 
 const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia?.('(hover: hover) and (pointer: fine)');
 const chapters = [
   { id: 'all', name: '全部片段', subtitle: 'Lucky 的小日子', ids: null },
+  { id: 'home', name: '家里的新日常', subtitle: '窗边、书桌与沙发', ids: ['lucky-at-the-night-window','lucky-touching-a-finger-at-keyboard','lucky-reaching-toward-the-desk','lucky-by-the-floral-cushion','lucky-fluffy-back','lucky-peeking-over-the-table','lucky-curled-up'] },
   { id: 'together', name: '相伴时光', subtitle: '怀里与沙发旁的小日子', ids: ['lucky-holding-a-finger','lucky-and-the-blue-feather','lucky-by-the-sofa-cover'] },
   { id: 'window', name: '窗边小家', subtitle: '黄色小窝与窗边一角', ids: ['lucky-in-the-yellow-bed','lucky-in-the-litter-box','lucky-window-corner'] },
   { id: 'first', name: '初见 Lucky', subtitle: '航空箱里的小眼神', ids: ['lucky-in-the-carrier','lucky-looking-up','lucky-looking-up-at-the-carrier-door','lucky-turning-in-the-carrier','lucky-exploring'] },

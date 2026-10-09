@@ -2,6 +2,55 @@
 export const site = { title: 'Lucky 的日常', description: '有 Lucky 的普通日子。' };
 export const notes = [
   {
+    id: 'lucky-at-the-night-window', date: '2026-10-09', title: '夜里的窗边',
+    description: '窗外亮着灯，Lucky 回头看了一眼。',
+    paragraphs: ['夜色里，Lucky 待在窗边，回头望向镜头。'],
+    photo: 'assets/lucky-photo-07.jpg', width: 720, height: 1280,
+    alt: 'Lucky 夜里趴在窗边，身后有窗框和窗外灯光', caption: '夜色里的 Lucky',
+  },
+  {
+    id: 'lucky-touching-a-finger-at-keyboard', date: '2026-10-09', title: '键盘边的小碰爪',
+    description: '屏幕下伸出一只小爪，碰到手指。',
+    paragraphs: ['电脑屏幕下，Lucky 伸出前爪，轻轻碰到键盘旁的手指。'],
+    photo: 'assets/lucky-photo-08.jpg', width: 719, height: 1280,
+    alt: '电脑屏幕下，Lucky 的前爪碰着人的手指，旁边是键盘', caption: '小爪碰到手指',
+  },
+  {
+    id: 'lucky-reaching-toward-the-desk', date: '2026-10-09', title: '伸长身子看一看',
+    description: '后脚踩着坐垫，前爪搭到木柜边。',
+    paragraphs: ['Lucky 站在绿色坐垫上，伸长身子，朝旁边的木柜看去。'],
+    photo: 'assets/lucky-photo-09.jpg', width: 720, height: 1280,
+    alt: 'Lucky 后脚站在绿色坐垫上，前脚搭着旁边的木柜', caption: '伸长身子的 Lucky',
+  },
+  {
+    id: 'lucky-by-the-floral-cushion', date: '2026-10-09', title: '花纹靠垫前的小团子',
+    description: '收起小爪，在绿色坐垫上安静待着。',
+    paragraphs: ['Lucky 蜷伏在绿色坐垫上，身后是印着深色花朵的靠垫。'],
+    photo: 'assets/lucky-photo-10.jpg', width: 720, height: 1280,
+    alt: 'Lucky 蜷伏在绿色坐垫上，身后是印着深色花朵的靠垫', caption: '沙发上的小团子',
+  },
+  {
+    id: 'lucky-fluffy-back', date: '2026-10-09', title: '蓬蓬的背影',
+    description: '背对镜头坐着，毛毛蓬成一团。',
+    paragraphs: ['Lucky 背对镜头，坐在蓝边白色垫子上，留下一张蓬松的背影。'],
+    photo: 'assets/lucky-photo-11.jpg', width: 720, height: 1280,
+    alt: 'Lucky 背对镜头坐在蓝边白色垫子上，一只手在它身旁', caption: 'Lucky 的背影',
+  },
+  {
+    id: 'lucky-peeking-over-the-table', date: '2026-10-09', title: '桌边探出小脑袋',
+    description: '从桌边探出头，露出一点小舌尖。',
+    paragraphs: ['有人轻扶着桌边的 Lucky，它低头探向桌沿，小舌尖也一起出镜了。'],
+    photo: 'assets/lucky-photo-12.jpg', width: 1280, height: 720, previewFit: 'contain',
+    alt: '有人扶着桌边的 Lucky，Lucky 探出桌沿，露出一点舌尖', caption: '探头的小瞬间',
+  },
+  {
+    id: 'lucky-curled-up', date: '2026-10-09', title: '缩成一团的毛球',
+    description: '蜷在坐垫一角，蓬松得像一团云。',
+    paragraphs: ['Lucky 在花纹坐垫上蜷成一团，蓬松的背和灰色的尾巴露在外面。'],
+    photo: 'assets/lucky-photo-13.jpg', width: 720, height: 1280,
+    alt: 'Lucky 在花纹坐垫上蜷成一团，露出蓬松的背和灰色尾巴', caption: '一团毛茸茸的 Lucky',
+  },
+  {
     id: 'lucky-holding-a-finger', date: '2026-10-09', title: '小爪抱住手指',
     description: '仰躺在腿上，轻轻抱住伸来的手指。',
     paragraphs: ['Lucky 仰躺在腿上，用前爪抱住伸来的手指，圆圆的眼睛望向身边的人。'],
