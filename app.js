@@ -1,5 +1,5 @@
 import { site, notes } from './content.js';
-import { renderAlbum, mountAlbum, destroyAlbum } from './album.js';
+import { renderAlbum, mountAlbum, destroyAlbum } from './album.js?v=lucky-character-1';
 
 const main = document.querySelector('main');
 const dialog = document.querySelector('.lightbox');
@@ -12,6 +12,14 @@ const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({'&':'&am
 const dateText = (date) => date.replaceAll('-', '.');
 const duration = (note) => note.video ? `视频 · ${escape(note.duration)}` : '照片';
 const albumCount = `${String(notes.filter(note => note.video).length).padStart(2,'0')} 段视频 · ${String(notes.filter(note => !note.video).length).padStart(2,'0')} 张照片`;
+
+function renderCharacter() {
+  return `<section class="character-view" aria-labelledby="character-title">
+    <div class="character-hero"><div class="character-copy"><p class="character-kicker">LUCKY / CHARACTER 01</p><h1 id="character-title">如果 Lucky<br>走进绘本</h1><p class="character-lead">真实的 Lucky 有一身蓬松的奶白色长毛，头顶和尾巴沾着一点银灰。这里是根据它的照片想象出的另一个模样。</p><a class="character-back" href="#/">回到相册 <span aria-hidden="true">↗</span></a></div><figure class="character-portrait"><img src="assets/lucky-character.png" alt="Lucky 的虚拟形象：白灰色短发、猫耳、蓝灰色眼睛，穿着森林绿背带裤的猫耳角色" width="1024" height="1536"><figcaption>Lucky 的虚拟形象 · 根据真实照片创作</figcaption></figure></div>
+    <div class="character-origin"><figure><img src="assets/lucky-photo-03.jpg" alt="真实的 Lucky 仰面躺着，举着毛茸茸的爪子" width="719" height="1280" loading="lazy"><figcaption>现实里的 Lucky</figcaption></figure><div class="character-origin-copy"><p class="character-kicker">A LITTLE BIT OF LUCKY</p><h2>一眼就认得出你</h2><p>灰色的小发梢、圆圆的眼睛、粉色鼻子和蓬松的尾巴，都来自 Lucky 自己。奶油色衬衫与绿色背带裤，是它在绘本里的新衣服。</p><a href="#/notes">去看 Lucky 的真实日常 <span aria-hidden="true">↗</span></a></div></div>
+    <div class="character-stickers"><div class="character-stickers-heading"><p class="character-kicker">LUCKY / LITTLE EXPRESSIONS</p><h2>Lucky 的小表情</h2><p>挥挥手，或是把脸藏进爪爪里。</p></div><div class="character-sticker-grid"><figure><img src="assets/lucky-sticker-hello.png" alt="虚拟 Lucky 开开心心地挥手" loading="lazy"><figcaption>你好呀</figcaption></figure><figure><img src="assets/lucky-sticker-sleepy.png" alt="虚拟 Lucky 害羞地遮住脸，困困地眯起眼睛" loading="lazy"><figcaption>困困啦</figcaption></figure></div></div>
+  </section>`;
+}
 
 document.querySelector('.skip-link').addEventListener('click', event => {
   event.preventDefault();
@@ -35,11 +43,14 @@ function render() {
   destroyAlbum();
   const route = location.hash === '#main' ? '/' : (location.hash.slice(1) || '/');
   document.querySelectorAll('[data-nav]').forEach(link => link.removeAttribute('aria-current'));
-  document.querySelector(`[data-nav="${route === '/' || route === '/photos' ? 'photos' : 'notes'}"]`).setAttribute('aria-current', 'page');
+  document.querySelector(`[data-nav="${route === '/' || route === '/photos' ? 'photos' : route === '/character' ? 'character' : 'notes'}"]`).setAttribute('aria-current', 'page');
   if (route === '/' || route === '/photos') {
     document.title = `${site.title} · 贴纸小相册`;
     main.innerHTML = renderAlbum();
     mountAlbum(main,openPhoto);
+  } else if (route === '/character') {
+    document.title = `Lucky 的虚拟形象 · ${site.title}`;
+    main.innerHTML = renderCharacter();
   } else if (route === '/notes') {
     document.title = `${site.title} · 猫咪小相册`;
     main.innerHTML = `<section class="journal-view"><div class="section-heading"><h1>最近的日记</h1><span>${albumCount}</span></div><div class="post-list">${notes.map((note,index) => `<article class="post-item"><a class="post-link" href="#/note/${escape(note.id)}"><div class="post-info"><time class="post-date" datetime="${note.date}">收录于 ${dateText(note.date)}</time><h2 class="post-title">${escape(note.title)}</h2><p class="post-description">${escape(note.description)}</p></div>${thumbnail(note,index)}</a></article>`).join('')}</div></section>`;
