@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Lucky 的日常 · 猫咪小相册</title>
+  <meta name="description" content="有 Lucky 的普通日子。留住 Lucky 的小眼神、小动作和每一个可爱瞬间。">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="album.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+  <div class="container">
+    <header class="site-header">
+      <a class="site-title" href="#/" aria-label="Lucky 的日常，首页">Lucky 的日常<span class="title-period">.</span></a>
+      <p class="site-description">有 Lucky 的普通日子。</p>
+      <nav class="site-nav" aria-label="主要导航">
+        <a href="#/" data-nav="photos">相册 <span lang="en">ALBUM</span></a>
+        <a href="#/notes" data-nav="notes">日记 <span lang="en">NOTES</span></a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"></main>
+    <footer class="site-footer">
+      <p>© 2026 · Lucky 的日常</p>
+    </footer>
+  </div>
+  <dialog class="lightbox" aria-label="Lucky 的相册">
+    <div class="lightbox-shell">
+      <div class="lightbox-top"><span id="photo-position"></span><a id="media-note-link" href="#/notes">查看日记</a><button class="close-button" type="button">关闭 <span aria-hidden="true">×</span></button></div>
+      <img class="lightbox-image" alt="" hidden>
+      <video class="lightbox-video" controls playsinline preload="none" hidden></video>
+      <p class="lightbox-caption"></p>
+      <div class="lightbox-navigation"><button type="button" id="previous-photo">上一个</button><button type="button" id="next-photo">下一个</button></div>
+    </div>
+  </dialog>
+</body>
+</html>

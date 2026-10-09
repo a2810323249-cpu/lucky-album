@@ -1,0 +1,72 @@
+// Lucky's photos and videos, supplied by the site owner. Dates indicate collection dates.
+export const site = { title: 'Lucky 的日常', description: '有 Lucky 的普通日子。' };
+export const notes = [
+  {
+    id: 'lucky-watching-the-bird', date: '2026-10-09', title: '抬头看小鸟',
+    description: 'Lucky 抬起头，小鸟停在笼顶。',
+    paragraphs: ['Lucky 在白色笼子里抬头，笼顶停着一只黄绿色的小鸟。'],
+    photo: 'assets/lucky-04.jpg', video: 'assets/lucky-04.mp4', duration: '00:06',
+    width: 544, height: 960, previewFit: 'contain',
+    alt: 'Lucky 在白色笼子里抬头，黄绿色小鸟停在笼顶', caption: '笼顶的小鸟',
+  },
+  {
+    id: 'lucky-and-a-small-neighbor', date: '2026-10-09', title: '椅脚旁的小相遇',
+    description: '椅脚旁的 Lucky，地板上的小鸟。',
+    paragraphs: ['Lucky 在椅脚旁望向地板上的黄绿色小鸟。'],
+    photo: 'assets/lucky-05.jpg', video: 'assets/lucky-05.mp4', duration: '00:11',
+    width: 1280, height: 720, previewFit: 'contain',
+    alt: 'Lucky 待在椅脚旁，旁边的地板上站着一只黄绿色小鸟', caption: 'Lucky 和小鸟的同框',
+  },
+  {
+    id: 'lucky-at-the-bowl', date: '2026-10-09', title: '碗边的小脑袋',
+    description: '毛茸茸的小脸，凑在粉色小碗旁。',
+    paragraphs: ['Lucky 低着头，小脑袋凑在粉色的食盆旁。'],
+    photo: 'assets/lucky-photo-01.jpg', width: 719, height: 1280,
+    alt: 'Lucky 在笼子里低着头，小脸凑在粉色食盆旁', caption: '碗边的 Lucky',
+  },
+  {
+    id: 'lucky-sleeping-on-the-back', date: '2026-10-09', title: '睡觉，四脚朝天',
+    description: '仰面躺着，小爪爪也放松了。',
+    paragraphs: ['Lucky 仰面躺在印花布上，闭着眼睛，露出粉色的小爪垫。'],
+    photo: 'assets/lucky-photo-02.jpg', width: 719, height: 1280,
+    alt: 'Lucky 闭着眼睛仰面躺在印花布上，四只小爪自然伸开', caption: '四脚朝天的小睡姿',
+  },
+  {
+    id: 'lucky-little-paws', date: '2026-10-09', title: '举起小爪爪',
+    description: '一只小爪靠着脸，另一只举起来。',
+    paragraphs: ['Lucky 仰面躺着，一只前爪靠在脸旁，另一只前爪露出粉色的小爪垫。'],
+    photo: 'assets/lucky-photo-03.jpg', width: 719, height: 1280,
+    alt: 'Lucky 仰面躺着，两只前爪举到脸旁，露出粉色的爪垫', caption: 'Lucky 的小爪爪',
+  },
+  {
+    id: 'lucky-hiding-the-face', date: '2026-10-09', title: '把脸藏进小爪爪',
+    description: '前爪遮住小脸，安安静静地躺着。',
+    paragraphs: ['Lucky 躺在印花布上，用毛茸茸的前爪遮住小脸。'],
+    photo: 'assets/lucky-photo-04.jpg', width: 719, height: 1280,
+    alt: 'Lucky 仰面躺在印花布上，用前爪遮住脸', caption: '小爪爪后面，是 Lucky',
+  },
+  {
+    id: 'lucky-in-the-carrier', date: '2026-10-09', title: '航空箱里的小眼神',
+    description: '转头看看，再看看镜头。',
+    paragraphs: ['Lucky 待在航空箱里，转头张望，又看向镜头。'],
+    photo: 'assets/lucky-01.jpg', video: 'assets/lucky-01.mp4', duration: '00:06',
+    width: 544, height: 960,
+    alt: 'Lucky 在航空箱里望向镜头，前爪放在箱内', caption: 'Lucky 的小眼神',
+  },
+  {
+    id: 'lucky-looking-up', date: '2026-10-09', title: '抬头看镜头',
+    description: '一小段 Lucky 的近距离记录。',
+    paragraphs: ['Lucky 在航空箱内的垫子上，抬头看向镜头。'],
+    photo: 'assets/lucky-02.jpg', video: 'assets/lucky-02.mp4', duration: '00:03',
+    width: 720, height: 1280,
+    alt: 'Lucky 在航空箱里抬头看着镜头', caption: '抬头的这一瞬间',
+  },
+  {
+    id: 'lucky-exploring', date: '2026-10-09', title: '出来走走啦',
+    description: '箱门打开了，Lucky 出来走走。',
+    paragraphs: ['Lucky 在瓷砖地面上走动，停在打开的航空箱门旁。'],
+    photo: 'assets/lucky-03.jpg', video: 'assets/lucky-03.mp4', duration: '00:11',
+    width: 720, height: 1280,
+    alt: 'Lucky 在瓷砖地面上走动，旁边是打开的航空箱门', caption: '出来走走的 Lucky',
+  },
+];

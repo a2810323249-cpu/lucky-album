@@ -1,0 +1,118 @@
+import { site, notes } from './content.js';
+import { renderAlbum, mountAlbum, destroyAlbum } from './album.js';
+
+const main = document.querySelector('main');
+const dialog = document.querySelector('.lightbox');
+const image = dialog.querySelector('img');
+const video = dialog.querySelector('video');
+let activePhoto = 0;
+let lastPhotoButton;
+let lastRoute = '';
+const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const dateText = (date) => date.replaceAll('-', '.');
+const duration = (note) => note.video ? `视频 · ${escape(note.duration)}` : '照片';
+const albumCount = `${String(notes.filter(note => note.video).length).padStart(2,'0')} 段视频 · ${String(notes.filter(note => !note.video).length).padStart(2,'0')} 张照片`;
+
+document.querySelector('.skip-link').addEventListener('click', event => {
+  event.preventDefault();
+  main.focus();
+  main.scrollIntoView({block:'start'});
+});
+document.querySelector('.site-title').firstChild.textContent = site.title;
+document.querySelector('.site-description').textContent = site.description;
+document.querySelector('.site-title').setAttribute('aria-label', `${site.title}，首页`);
+document.querySelector('.site-footer > p').textContent = `© 2026 · ${site.title}`;
+
+function thumbnail(note, index, album = false) {
+  return `<span class="media-thumbnail ${album ? 'album-thumbnail' : ''}"><img class="${album ? '' : 'post-thumbnail'}" src="${escape(note.photo)}" alt="${escape(note.alt)}" width="${album ? 400 : 144}" height="${album ? 400 : 144}" ${note.previewFit === 'contain' ? 'style="object-fit:contain"' : ''} ${index > 1 ? 'loading="lazy"' : ''}>${note.video ? `<span class="video-badge">视频 ${escape(note.duration)}</span>` : ''}</span>`;
+}
+function pauseInlineVideos() {
+  main.querySelectorAll('video').forEach(element => element.pause());
+}
+function render() {
+  if (dialog.open) closePhoto();
+  pauseInlineVideos();
+  destroyAlbum();
+  const route = location.hash === '#main' ? '/' : (location.hash.slice(1) || '/');
+  document.querySelectorAll('[data-nav]').forEach(link => link.removeAttribute('aria-current'));
+  document.querySelector(`[data-nav="${route === '/' || route === '/photos' ? 'photos' : 'notes'}"]`).setAttribute('aria-current', 'page');
+  if (route === '/' || route === '/photos') {
+    document.title = `${site.title} · 贴纸小相册`;
+    main.innerHTML = renderAlbum();
+    mountAlbum(main,openPhoto);
+  } else if (route === '/notes') {
+    document.title = `${site.title} · 猫咪小相册`;
+    main.innerHTML = `<section class="journal-view"><div class="section-heading"><h1>最近的日记</h1><span>${albumCount}</span></div><div class="post-list">${notes.map((note,index) => `<article class="post-item"><a class="post-link" href="#/note/${escape(note.id)}"><div class="post-info"><time class="post-date" datetime="${note.date}">收录于 ${dateText(note.date)}</time><h2 class="post-title">${escape(note.title)}</h2><p class="post-description">${escape(note.description)}</p></div>${thumbnail(note,index)}</a></article>`).join('')}</div></section>`;
+  } else {
+    const note = notes.find(n => route === `/note/${n.id}`);
+    if (note) {
+      document.title = `${note.title} · ${site.title}`;
+      const media = note.video
+        ? `<video class="note-video" controls playsinline preload="none" poster="${escape(note.photo)}" width="${note.width}" height="${note.height}" aria-label="${escape(note.alt)}"><source src="${escape(note.video)}" type="video/mp4">无法播放视频，<a href="${escape(note.video)}">打开视频文件</a>。</video><button class="expand-video" data-photo="${notes.indexOf(note)}" type="button">放大观看</button>`
+        : `<button type="button" class="photo-button" data-photo="${notes.indexOf(note)}" aria-label="查看大图：${escape(note.caption)}"><img class="note-photo" src="${escape(note.photo)}" alt="${escape(note.alt)}"></button>`;
+      main.innerHTML = `<article class="note-view"><a class="back-link" href="#/notes">返回日记</a><h1 class="note-title">${escape(note.title)}</h1><div class="note-meta"><time datetime="${note.date}">收录于 ${dateText(note.date)}</time><span>${duration(note)}</span></div><div class="note-body">${note.paragraphs.map(p => `<p>${escape(p)}</p>`).join('')}</div><figure class="note-photo-block">${media}<figcaption class="photo-caption">${escape(note.caption)}</figcaption></figure><div class="note-end"><a class="back-link" href="#/notes">返回所有日记</a></div></article>`;
+    } else {
+      document.title = `未找到日记 · ${site.title}`;
+      main.innerHTML = '<h1 class="note-title">这篇日记还没有写。</h1><a class="back-link" href="#/notes">返回日记</a>';
+    }
+  }
+  if (lastRoute && route !== lastRoute) { window.scrollTo(0,0); main.focus({preventScroll:true}); }
+  lastRoute = route;
+}
+
+function updatePhoto() {
+  const note = notes[activePhoto];
+  video.pause();
+  video.removeAttribute('src');
+  video.hidden = !note.video;
+  image.hidden = !!note.video;
+  if (note.video) {
+    video.poster = note.photo;
+    video.src = note.video;
+    video.setAttribute('aria-label', note.alt);
+    image.removeAttribute('src');
+  } else {
+    image.src = note.photo;
+    image.alt = note.alt;
+  }
+  video.load();
+  dialog.querySelector('.lightbox-caption').textContent = note.caption;
+  document.querySelector('#media-note-link').href = `#/note/${note.id}`;
+  document.querySelector('#photo-position').textContent = `${activePhoto + 1} / ${notes.length}`;
+  document.querySelector('#previous-photo').disabled = activePhoto === 0;
+  document.querySelector('#next-photo').disabled = activePhoto === notes.length - 1;
+}
+function openPhoto(index,button) {
+  pauseInlineVideos();
+  activePhoto = index;
+  lastPhotoButton = button;
+  updatePhoto();
+  dialog.showModal();
+  document.documentElement.classList.add('modal-open');
+}
+function closePhoto() {
+  video.pause();
+  video.removeAttribute('src');
+  video.load();
+  dialog.close();
+  document.documentElement.classList.remove('modal-open');
+  if (lastPhotoButton?.isConnected) lastPhotoButton.focus({preventScroll:true});
+}
+main.addEventListener('click', event => {
+  const button = event.target.closest('[data-photo]');
+  if (button) openPhoto(Number(button.dataset.photo),button);
+});
+dialog.querySelector('.close-button').addEventListener('click',closePhoto);
+document.querySelector('#media-note-link').addEventListener('click',closePhoto);
+dialog.addEventListener('cancel', event => { event.preventDefault(); closePhoto(); });
+dialog.addEventListener('click', event => { if (event.target === dialog) closePhoto(); });
+document.querySelector('#previous-photo').addEventListener('click', () => { if(activePhoto > 0) { activePhoto--; updatePhoto(); } });
+document.querySelector('#next-photo').addEventListener('click', () => { if(activePhoto < notes.length - 1) { activePhoto++; updatePhoto(); } });
+dialog.addEventListener('keydown', event => {
+  // Native video controls use arrows for seeking and volume.
+  if(event.target.closest('video')) return;
+  if(event.key === 'ArrowLeft' && activePhoto > 0) {event.preventDefault(); activePhoto--;updatePhoto();}
+  if(event.key === 'ArrowRight' && activePhoto < notes.length - 1) {event.preventDefault(); activePhoto++;updatePhoto();}
+});
+window.addEventListener('hashchange',render);
+render();
