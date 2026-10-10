@@ -9,39 +9,34 @@ const SPRITES = Object.freeze({
   sleep: 'assets/lucky-cozy-sleep.png'
 });
 
-// Paths use the 1284 × 1225 reference board; the exported cozy images are
-// 1329 × 1183. Scale paths at render time so masks match the real pixels.
+// These shapes sit inside the 1329 × 1183 illustration. The full idle image
+// stays opaque beneath them; animation never cuts holes through Lucky.
 const ART = Object.freeze({
-  earLeft: 'M 225 430 Q 213 304 226 181 Q 233 118 291 126 Q 371 145 488 354 L 518 431 Z',
-  earRight: 'M 614 419 Q 637 258 669 130 Q 693 70 745 95 Q 816 131 854 407 Z',
-  chest: 'M 325 637 Q 374 577 478 584 Q 593 572 752 596 Q 832 673 810 843 Q 786 929 719 970 L 387 971 Q 310 893 325 637 Z',
-  pawLeft: 'M 373 882 Q 417 876 468 895 Q 527 904 568 943 L 579 1119 Q 514 1156 418 1131 Q 365 1100 373 882 Z',
-  pawRight: 'M 574 924 Q 622 884 692 884 Q 766 884 794 949 L 810 1118 Q 723 1160 610 1134 Q 562 1101 574 924 Z',
-  tail: 'M 866 1034 Q 916 957 934 870 Q 946 742 906 650 Q 877 566 924 454 Q 989 321 1091 300 Q 1190 285 1230 371 Q 1264 469 1212 590 Q 1161 701 1133 810 Q 1110 948 1061 1050 Q 981 1135 866 1034 Z',
-  eyes: 'M 372 349 H 784 V 555 H 372 Z'
+  earLeft: 'M 314 319 Q 318 228 347 192 Q 375 194 421 262 L 432 335 Q 387 363 337 347 Z',
+  earRight: 'M 680 319 Q 696 215 732 169 Q 768 204 789 291 L 778 347 Q 734 360 680 319 Z',
+  chest: 'M 443 744 Q 461 679 569 654 Q 691 647 747 711 Q 781 785 747 859 Q 674 903 531 880 Q 454 857 443 744 Z',
+  pawLeft: 'M 432 984 Q 475 950 536 977 Q 558 1020 547 1084 Q 501 1103 448 1081 Q 424 1040 432 984 Z',
+  pawRight: 'M 590 978 Q 641 946 704 974 Q 735 1018 717 1083 Q 665 1104 609 1082 Q 587 1047 590 978 Z',
+  tail: 'M 954 452 Q 1012 392 1090 400 Q 1167 412 1188 482 Q 1194 554 1153 648 Q 1097 674 1036 632 Q 987 585 954 452 Z',
+  eyeLeft: 'M 375 420 Q 408 373 483 374 Q 548 383 559 450 Q 554 518 483 526 Q 408 520 375 471 Z',
+  eyeRight: 'M 595 413 Q 630 363 697 370 Q 767 385 773 449 Q 760 515 691 521 Q 621 514 595 471 Z'
 });
-
-const ART_PATH_SCALE = `scale(${1329 / 1284} ${1183 / 1225})`;
-const partClip = (name) => `<clipPath id="lucky-${name}"><g transform="${ART_PATH_SCALE}"><path d="${ART[name]}"/></g></clipPath>`;
+const partClip = (name) => `<clipPath id="lucky-${name}"><path d="${ART[name]}"/></clipPath>`;
 const partImage = (name, className, src = SPRITES.idle) =>
   `<g class="${className}" clip-path="url(#lucky-${name})"><image href="${src}" width="1329" height="1183"/></g>`;
 const rigMarkup = `<svg class="lucky-pet-rig" viewBox="0 0 1329 1183" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <defs>
-    ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail', 'eyes'].map(partClip).join('')}
-    <mask id="lucky-core-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1329" height="1183" style="mask-type:luminance">
-      <rect width="1329" height="1183" fill="white"/>
-      <g transform="${ART_PATH_SCALE}">${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail'].map(name => `<path d="${ART[name]}" fill="black"/>`).join('')}</g>
-    </mask>
+    ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail', 'eyeLeft', 'eyeRight'].map(partClip).join('')}
   </defs>
-  <image class="lucky-pet-underpaint" href="${SPRITES.idle}" width="1329" height="1183"/>
+  <image class="lucky-pet-base" href="${SPRITES.idle}" width="1329" height="1183"/>
   ${partImage('tail', 'lucky-pet-tail')}
-  <image class="lucky-pet-core" href="${SPRITES.idle}" width="1329" height="1183" mask="url(#lucky-core-mask)"/>
   ${partImage('earLeft', 'lucky-pet-ear-left')}
   ${partImage('earRight', 'lucky-pet-ear-right')}
   ${partImage('chest', 'lucky-pet-chest')}
   ${partImage('pawLeft', 'lucky-pet-paw-left')}
   ${partImage('pawRight', 'lucky-pet-paw-right')}
-  ${partImage('eyes', 'lucky-pet-blink', SPRITES.blink)}
+  ${partImage('eyeLeft', 'lucky-pet-blink', SPRITES.blink)}
+  ${partImage('eyeRight', 'lucky-pet-blink', SPRITES.blink)}
 </svg>`;
 let saved = {};
 try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { /* Storage can be unavailable. */ }
@@ -119,7 +114,7 @@ function scheduleBlink() {
     blinkEndTimer = window.setTimeout(() => {
       pet.classList.remove('is-blinking');
       scheduleBlink();
-    }, 190);
+    }, 240);
   }, 3900 + Math.random() * 2200);
 }
 
