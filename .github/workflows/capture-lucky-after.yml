@@ -63,6 +63,24 @@ jobs:
             console.log(target.name + ' passed; sprites=' + JSON.stringify(dimensions));
             await context.close();
           }
+          const closeContext = await browser.newContext({ viewport: { width: 900, height: 600 }, deviceScaleFactor: 4 });
+          const closePage = await closeContext.newPage();
+          await closePage.goto('http://127.0.0.1:4173/index.html#/character', { waitUntil: 'networkidle' });
+          await closePage.locator('.lucky-pet-rig').waitFor();
+          await closePage.waitForTimeout(1500);
+          const petBox = await closePage.locator('.lucky-pet').boundingBox();
+          const clip = { x: 0, y: Math.max(0, petBox.y - 8), width: 236, height: 220 };
+          await closePage.screenshot({ path: 'qa/after-pet-idle-closeup.png', clip, scale: 'device' });
+          await closePage.locator('.lucky-pet').evaluate(el => el.classList.add('is-blinking'));
+          await closePage.screenshot({ path: 'qa/after-pet-blink-closeup.png', clip, scale: 'device' });
+          await closePage.locator('.lucky-pet').evaluate(el => el.classList.remove('is-blinking'));
+          await closePage.locator('.lucky-pet-character').click();
+          await closePage.screenshot({ path: 'qa/after-pet-paw-closeup.png', clip, scale: 'device' });
+          await closePage.locator('.lucky-pet-menu-toggle').click();
+          await closePage.locator('[data-pet-action="sleep"]').click();
+          await closePage.waitForTimeout(380);
+          await closePage.screenshot({ path: 'qa/after-pet-sleep-closeup.png', clip, scale: 'device' });
+          await closeContext.close();
           await browser.close();
           JS
       - uses: actions/upload-artifact@v4
