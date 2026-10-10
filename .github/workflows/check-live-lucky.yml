@@ -1,0 +1,24 @@
+name: Verify published Lucky album
+on:
+  push:
+    branches: [lucky-layered-motion-work]
+    paths: [.github/workflows/check-live-lucky.yml]
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check GitHub Pages serves the new character
+        run: |
+          set -euo pipefail
+          base="https://a2810323249-cpu.github.io/lucky-album"
+          for attempt in 1 2 3 4 5 6; do
+            if curl -fsSL "$base/index.html?live-check=${GITHUB_RUN_ID}" -o /tmp/lucky-index.html; then break; fi
+            sleep 5
+          done
+          grep -q 'lucky-cozy-1' /tmp/lucky-index.html
+          curl -fsSL "$base/pet.js?live-check=${GITHUB_RUN_ID}" -o /tmp/lucky-pet.js
+          grep -q 'lucky-cozy-idle.png' /tmp/lucky-pet.js
+          curl -fsSL "$base/assets/lucky-cozy-idle.png?live-check=${GITHUB_RUN_ID}" -o /tmp/lucky-cozy-idle.png
+          file /tmp/lucky-cozy-idle.png
+          echo "Published Lucky album and selected cozy sprite are available."
