@@ -1,0 +1,34 @@
+name: Capture Lucky before motion refinement
+on:
+  push:
+    branches: [lucky-layered-motion-work]
+    paths: [.github/workflows/capture-lucky-before.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Save desktop and mobile baseline
+        run: |
+          mkdir -p qa
+          npx playwright screenshot --browser chromium --viewport-size="1440,900" --wait-for-timeout=2200 --full-page 'https://a2810323249-cpu.github.io/lucky-album/index.html?baseline=8827c45#/character' qa/before-desktop.png
+          npx playwright screenshot --browser chromium --viewport-size="390,844" --wait-for-timeout=2200 --full-page 'https://a2810323249-cpu.github.io/lucky-album/index.html?baseline=8827c45#/character' qa/before-mobile.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lucky-before-motion
+          path: qa/before-*.png
+      - name: Preserve baseline on the working branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qa/before-desktop.png qa/before-mobile.png
+          git commit -m "Save before screenshots for Lucky motion comparison"
+          git push
