@@ -2,9 +2,9 @@
 
 Lucky 的静态猫咪日记与贴纸相册，包含立体封面展开、纸页翻阅、章节切换、卡片微倾斜与光泽、静音悬停视频预览，以及深色媒体查看器。
 
-另有根据 Lucky 照片反复调整的本猫像素形象与动作贴纸。形象页位于 `#/character`，相册封面也展示真实 Lucky 与像素形象的对照。像素小猫依据主人确认的三个月大、母三花、长尾巴，以及照片中可见的奶白长毛、烟灰与浅杏斑块、粉色鼻子和蓬松灰尖尾巴。
+另有依据 Lucky 照片制作的本猫像素形象与动作贴纸。形象页位于 `#/character`，相册封面也展示真实 Lucky 与像素形象的对照。此次沿用主人选定的第一版柔和造型：三个月大的长尾母三花、奶白长毛、烟灰与浅杏斑块、粉色鼻子和蓬松灰尖尾巴。旧版图像保留在仓库中，形象页可并排查看新旧版本。
 
-页面右下角有可互动的 Lucky 像素网页桌宠，保持四足小猫造型。可以轻点摸摸、玩耍、睡觉与叫醒，拖动或用方向键移动，收起后可唤回；声音默认关闭，位置和偏好仅保存在当前浏览器。网页桌宠独立于 ChatGPT/Codex 的桌宠，不读取其任务状态。
+桌面左下角、手机右下角有可互动的 Lucky 像素网页桌宠，保持四足小猫造型。可以轻点摸摸、玩耍、睡觉与叫醒，拖动或用方向键移动，收起后可唤回；声音默认关闭，位置和偏好仅保存在当前浏览器。网页桌宠独立于 ChatGPT/Codex 的桌宠，不读取其任务状态。
 
 ## 内容
 
@@ -22,19 +22,28 @@ Lucky 的静态猫咪日记与贴纸相册，包含立体封面展开、纸页�
 
 ## 像素形象制作
 
-造型优先保留 Lucky 的幼猫轮廓、灰杏三花斑块和完整长尾，再精修眼睛、耳缘与成组的毛束。参考了 [Saint11 的像素色块与轮廓教程](https://saint11.art/pixel_art_articles/article2/)、[Lospec 的选择性轮廓教程](https://lospec.com/articles/pixel-art-outlines-part-2-using-color/)；互动方式参考 [Aseprite 的动作分帧方法](https://www.aseprite.org/docs/animation)及 [oneko.js 的桌宠状态切换](https://github.com/adryd325/oneko.js)。网站使用独立制作的 Lucky 图像与代码。
+造型优先保留 Lucky 的幼猫轮廓、灰杏三花斑块和完整长尾，以成组的明暗像素画出脸颊、胸毛和尾巴的毛束，不靠模糊整图模拟绒毛。网页桌宠将尾巴、胸毛、耳朵、双爪与眼睛拆成可独立运动的图层：缓慢呼吸、偶发眨眼与耳颤、轻微爪部和尾巴动作；睡姿只作一次平滑切换。系统设置“减少动态效果”时停止循环动作。声音默认关闭，当前使用网页合成的轻提示音，并非从视频提取的猫叫声。参考了 [Saint11 的像素色块与轮廓教程](https://saint11.art/pixel_art_articles/article2/)、[Lospec 的选择性轮廓教程](https://lospec.com/articles/pixel-art-outlines-part-2-using-color/)；互动方式参考 [Aseprite 的动作分帧方法](https://www.aseprite.org/docs/animation)及 [oneko.js 的桌宠状态切换](https://github.com/adryd325/oneko.js)。网站使用独立制作的 Lucky 图像与代码。
+
+## 新旧对比
+
+角色页的“原版／新版”卡片直接并排展示保留的站姿图与选定的柔和坐姿图。完整优化前代码另存于 [before-layered-motion-8827c45 分支](https://github.com/a2810323249-cpu/lucky-album/tree/before-layered-motion-8827c45)。
+
+| 浏览尺寸 | 优化前画面 | 优化后画面 |
+| --- | --- | --- |
+| 桌面 1440×900 | [原版截图](qa/before-desktop-viewport.png) | [新版截图](qa/after-desktop-viewport.png) |
+| 手机 390×844 | [原版整页截图](qa/before-mobile.png) | [新版整页截图](qa/after-mobile.png) |
 
 ## 修改
 
-- `dist/content.js`：网站名字、介绍、日记、日期、媒体路径和说明。
-- `dist/assets/`：Lucky 的视频、封面、原照片和图标。
-- `dist/styles.css`：响应式样式。
-- `dist/album.css`：书册、贴纸、纸页和动效样式。
-- `dist/album.js`：六个主题章节与全部浏览、分页、立体开合、触摸翻页、悬停预览与动效清理。
-- `dist/app.js`：日记、相册、虚拟形象、视频放大查看、键盘切换与关闭。
-- `dist/pet.js`、`dist/pet.css`：网页桌宠的互动、像素动作切换与动画样式。
+- `content.js`：网站名字、介绍、日记、日期、媒体路径和说明。
+- `assets/`：Lucky 的视频、封面、原照片和图标。
+- `styles.css`：响应式样式。
+- `album.css`：书册、贴纸、纸页和动效样式。
+- `album.js`：六个主题章节与全部浏览、分页、立体开合、触摸翻页、悬停预览与动效清理。
+- `app.js`：日记、相册、虚拟形象、视频放大查看、键盘切换与关闭。
+- `pet.js`、`pet.css`：网页桌宠的互动和分层动作。
 
-在项目根目录运行 `python -m http.server 4173 --directory dist` 即可本地浏览。静态托管使用 hash 路由，无需额外路由配置。
+在项目根目录运行 `python -m http.server 4173` 即可本地浏览。静态托管使用 hash 路由，无需额外路由配置。
 
 详情视频由用户手动播放，使用原生播放控件和移动端内嵌播放，关闭或切换时会暂停视频。
 
