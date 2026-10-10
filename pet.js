@@ -9,8 +9,8 @@ const SPRITES = Object.freeze({
   sleep: 'assets/lucky-cozy-sleep.png'
 });
 
-// All coordinates use the original 1284 × 1225 art board. Keeping them here
-// makes the mask easy to tune when Lucky's reference portrait is revised.
+// Paths use the 1284 × 1225 reference board; the exported cozy images are
+// 1329 × 1183. Scale paths at render time so masks match the real pixels.
 const ART = Object.freeze({
   earLeft: 'M 225 430 Q 213 304 226 181 Q 233 118 291 126 Q 371 145 488 354 L 518 431 Z',
   earRight: 'M 614 419 Q 637 258 669 130 Q 693 70 745 95 Q 816 131 854 407 Z',
@@ -21,20 +21,21 @@ const ART = Object.freeze({
   eyes: 'M 372 349 H 784 V 555 H 372 Z'
 });
 
-const partClip = (name) => `<clipPath id="lucky-${name}"><path d="${ART[name]}"/></clipPath>`;
+const ART_PATH_SCALE = `scale(${1329 / 1284} ${1183 / 1225})`;
+const partClip = (name) => `<clipPath id="lucky-${name}"><g transform="${ART_PATH_SCALE}"><path d="${ART[name]}"/></g></clipPath>`;
 const partImage = (name, className, src = SPRITES.idle) =>
-  `<g class="${className}" clip-path="url(#lucky-${name})"><image href="${src}" width="1284" height="1225"/></g>`;
-const rigMarkup = `<svg class="lucky-pet-rig" viewBox="0 0 1284 1225" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  `<g class="${className}" clip-path="url(#lucky-${name})"><image href="${src}" width="1329" height="1183"/></g>`;
+const rigMarkup = `<svg class="lucky-pet-rig" viewBox="0 0 1329 1183" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <defs>
     ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail', 'eyes'].map(partClip).join('')}
-    <mask id="lucky-core-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1284" height="1225" style="mask-type:luminance">
-      <rect width="1284" height="1225" fill="white"/>
-      ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail'].map(name => `<path d="${ART[name]}" fill="black"/>`).join('')}
+    <mask id="lucky-core-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1329" height="1183" style="mask-type:luminance">
+      <rect width="1329" height="1183" fill="white"/>
+      <g transform="${ART_PATH_SCALE}">${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail'].map(name => `<path d="${ART[name]}" fill="black"/>`).join('')}</g>
     </mask>
   </defs>
-  <image class="lucky-pet-underpaint" href="${SPRITES.idle}" width="1284" height="1225"/>
+  <image class="lucky-pet-underpaint" href="${SPRITES.idle}" width="1329" height="1183"/>
   ${partImage('tail', 'lucky-pet-tail')}
-  <image class="lucky-pet-core" href="${SPRITES.idle}" width="1284" height="1225" mask="url(#lucky-core-mask)"/>
+  <image class="lucky-pet-core" href="${SPRITES.idle}" width="1329" height="1183" mask="url(#lucky-core-mask)"/>
   ${partImage('earLeft', 'lucky-pet-ear-left')}
   ${partImage('earRight', 'lucky-pet-ear-right')}
   ${partImage('chest', 'lucky-pet-chest')}
@@ -51,7 +52,7 @@ pet.setAttribute('aria-label', 'Lucky 网页桌宠，一只奶白色、灰杏色
 pet.innerHTML = `<div class="lucky-pet-bubble" aria-hidden="true" hidden></div>
   <button class="lucky-pet-character" type="button" aria-label="摸摸 Lucky；拖动或使用方向键可移动桌宠" aria-describedby="lucky-pet-help">
     ${rigMarkup}
-    <img class="lucky-pet-pose" src="${SPRITES.sleep}" width="1284" height="1225" alt="" aria-hidden="true" draggable="false">
+    <img class="lucky-pet-pose" src="${SPRITES.sleep}" width="1329" height="1183" alt="" aria-hidden="true" draggable="false">
     <span class="lucky-pet-shadow" aria-hidden="true"></span>
     <span class="lucky-pet-heart" aria-hidden="true">♥</span>
     <span class="lucky-pet-spark" aria-hidden="true">✦</span>
