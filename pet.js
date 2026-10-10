@@ -2,12 +2,46 @@
 // and whether the visitor chose to keep the widget visible or quiet.
 const STORAGE_KEY = 'lucky-web-pet-v1';
 const SPRITES = Object.freeze({
-  idle: 'assets/lucky-pixel-idle.png?v=2',
-  blink: 'assets/lucky-pixel-blink.png?v=2',
-  hello: 'assets/lucky-pixel-hello.png?v=2',
-  play: 'assets/lucky-pixel-play.png?v=2',
-  sleep: 'assets/lucky-pixel-sleep.png?v=2'
+  idle: 'assets/lucky-cozy-idle.png',
+  blink: 'assets/lucky-cozy-blink.png',
+  hello: 'assets/lucky-cozy-hello.png',
+  play: 'assets/lucky-cozy-play.png',
+  sleep: 'assets/lucky-cozy-sleep.png'
 });
+
+// All coordinates use the original 1284 × 1225 art board. Keeping them here
+// makes the mask easy to tune when Lucky's reference portrait is revised.
+const ART = Object.freeze({
+  earLeft: 'M 225 430 Q 213 304 226 181 Q 233 118 291 126 Q 371 145 488 354 L 518 431 Z',
+  earRight: 'M 614 419 Q 637 258 669 130 Q 693 70 745 95 Q 816 131 854 407 Z',
+  chest: 'M 325 637 Q 374 577 478 584 Q 593 572 752 596 Q 832 673 810 843 Q 786 929 719 970 L 387 971 Q 310 893 325 637 Z',
+  pawLeft: 'M 373 882 Q 417 876 468 895 Q 527 904 568 943 L 579 1119 Q 514 1156 418 1131 Q 365 1100 373 882 Z',
+  pawRight: 'M 574 924 Q 622 884 692 884 Q 766 884 794 949 L 810 1118 Q 723 1160 610 1134 Q 562 1101 574 924 Z',
+  tail: 'M 866 1034 Q 916 957 934 870 Q 946 742 906 650 Q 877 566 924 454 Q 989 321 1091 300 Q 1190 285 1230 371 Q 1264 469 1212 590 Q 1161 701 1133 810 Q 1110 948 1061 1050 Q 981 1135 866 1034 Z',
+  eyes: 'M 372 349 H 784 V 555 H 372 Z'
+});
+
+const partClip = (name) => `<clipPath id="lucky-${name}"><path d="${ART[name]}"/></clipPath>`;
+const partImage = (name, className, src = SPRITES.idle) =>
+  `<g class="${className}" clip-path="url(#lucky-${name})"><image href="${src}" width="1284" height="1225"/></g>`;
+const rigMarkup = `<svg class="lucky-pet-rig" viewBox="0 0 1284 1225" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <defs>
+    ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail', 'eyes'].map(partClip).join('')}
+    <mask id="lucky-core-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1284" height="1225" style="mask-type:luminance">
+      <rect width="1284" height="1225" fill="white"/>
+      ${['earLeft', 'earRight', 'chest', 'pawLeft', 'pawRight', 'tail'].map(name => `<path d="${ART[name]}" fill="black"/>`).join('')}
+    </mask>
+  </defs>
+  <image class="lucky-pet-underpaint" href="${SPRITES.idle}" width="1284" height="1225"/>
+  ${partImage('tail', 'lucky-pet-tail')}
+  <image class="lucky-pet-core" href="${SPRITES.idle}" width="1284" height="1225" mask="url(#lucky-core-mask)"/>
+  ${partImage('earLeft', 'lucky-pet-ear-left')}
+  ${partImage('earRight', 'lucky-pet-ear-right')}
+  ${partImage('chest', 'lucky-pet-chest')}
+  ${partImage('pawLeft', 'lucky-pet-paw-left')}
+  ${partImage('pawRight', 'lucky-pet-paw-right')}
+  ${partImage('eyes', 'lucky-pet-blink', SPRITES.blink)}
+</svg>`;
 let saved = {};
 try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { /* Storage can be unavailable. */ }
 
@@ -16,7 +50,8 @@ pet.className = 'lucky-pet';
 pet.setAttribute('aria-label', 'Lucky 网页桌宠，一只奶白色、灰杏色斑块和蓬松长尾巴的三花小猫');
 pet.innerHTML = `<div class="lucky-pet-bubble" aria-hidden="true" hidden></div>
   <button class="lucky-pet-character" type="button" aria-label="摸摸 Lucky；拖动或使用方向键可移动桌宠" aria-describedby="lucky-pet-help">
-    <img class="lucky-pet-art" src="${SPRITES.idle}" width="1284" height="1225" alt="" aria-hidden="true" draggable="false" fetchpriority="high">
+    ${rigMarkup}
+    <img class="lucky-pet-pose" src="${SPRITES.sleep}" width="1284" height="1225" alt="" aria-hidden="true" draggable="false">
     <span class="lucky-pet-shadow" aria-hidden="true"></span>
     <span class="lucky-pet-heart" aria-hidden="true">♥</span>
     <span class="lucky-pet-spark" aria-hidden="true">✦</span>
@@ -43,7 +78,6 @@ launcher.innerHTML = '<span aria-hidden="true">🐾</span><span>Lucky</span>';
 
 document.body.append(pet, launcher);
 const character = pet.querySelector('.lucky-pet-character');
-const sprite = pet.querySelector('.lucky-pet-art');
 const bubble = pet.querySelector('.lucky-pet-bubble');
 const live = pet.querySelector('.lucky-pet-live');
 const menu = pet.querySelector('.lucky-pet-menu');
@@ -59,7 +93,6 @@ let hasCustomPosition = saved.moved === true || (saved.moved !== false && Number
 let position = { x: hasCustomPosition ? Number(saved.x) : NaN, y: hasCustomPosition ? Number(saved.y) : NaN };
 let bubbleTimer;
 let actionTimer;
-let sequenceTimer;
 let blinkTimer;
 let blinkEndTimer;
 let activePointer;
@@ -75,19 +108,17 @@ function preloadSprite(state) {
   preloadedSprites.set(state, image);
 }
 
-function displaySprite(state) { sprite.src = SPRITES[state]; }
-
 function scheduleBlink() {
   clearTimeout(blinkTimer);
   clearTimeout(blinkEndTimer);
-  if (pet.hidden || document.hidden || reducedMotion?.matches || pet.dataset.state !== 'idle') return;
+  if (pet.hidden || document.hidden || reducedMotion?.matches || pet.dataset.state === 'sleep') return;
   blinkTimer = window.setTimeout(() => {
-    if (pet.hidden || document.hidden || pet.dataset.state !== 'idle') return;
-    displaySprite('blink');
+    if (pet.hidden || document.hidden || pet.dataset.state === 'sleep') return;
+    pet.classList.add('is-blinking');
     blinkEndTimer = window.setTimeout(() => {
-      if (pet.dataset.state === 'idle') displaySprite('idle');
+      pet.classList.remove('is-blinking');
       scheduleBlink();
-    }, 160);
+    }, 190);
   }, 3900 + Math.random() * 2200);
 }
 
@@ -135,19 +166,13 @@ function showBubble(message, duration = 2400) {
 
 function setState(state, duration = 0) {
   clearTimeout(actionTimer);
-  clearInterval(sequenceTimer);
   clearTimeout(blinkTimer);
   clearTimeout(blinkEndTimer);
+  pet.classList.remove('is-blinking');
   pet.dataset.state = state;
-  displaySprite(state);
-  if (state === 'idle') scheduleBlink();
-  if ((state === 'hello' || state === 'play') && !reducedMotion?.matches) {
-    let active = true;
-    sequenceTimer = window.setInterval(() => {
-      active = !active;
-      displaySprite(active ? state : 'idle');
-    }, state === 'hello' ? 430 : 330);
-  }
+  // The awake figure is assembled from independently animated regions.
+  // Sleeping is one deliberate pose transition rather than a loop of whole images.
+  if (state !== 'sleep') scheduleBlink();
   if (duration) actionTimer = window.setTimeout(() => setState(isSleeping ? 'sleep' : 'idle'), duration);
 }
 
@@ -219,7 +244,6 @@ function showPet() {
 function hidePet() {
   closeMenu();
   clearTimeout(actionTimer);
-  clearInterval(sequenceTimer);
   clearTimeout(blinkTimer);
   clearTimeout(blinkEndTimer);
   clearTimeout(bubbleTimer);
@@ -235,12 +259,13 @@ soundButton.textContent = soundEnabled ? '♫ 声音：开启' : '♫ 声音：�
 pet.hidden = saved.visible === false;
 launcher.hidden = !pet.hidden;
 preloadSprite('blink');
+preloadSprite('sleep');
 setState('idle');
 setPosition(hasCustomPosition && Number.isFinite(position.x) ? position.x : defaultX(),
   hasCustomPosition && Number.isFinite(position.y) ? position.y : window.innerHeight - pet.offsetHeight - 16);
 
 launcher.addEventListener('click', showPet);
-character.addEventListener('pointerenter', () => preloadSprite('hello'));
+character.addEventListener('pointerenter', () => preloadSprite('blink'));
 character.addEventListener('click', () => {
   if (suppressClick) { suppressClick = false; return; }
   petLucky();
@@ -291,7 +316,7 @@ menuToggle.addEventListener('click', () => {
   menuToggle.setAttribute('aria-expanded', String(!menu.hidden));
   if (!menu.hidden) {
     bubble.hidden = true;
-    for (const state of ['hello', 'play', 'sleep']) preloadSprite(state);
+    preloadSprite('sleep');
   }
 });
 menu.addEventListener('click', (event) => {
@@ -325,8 +350,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     clearTimeout(blinkTimer);
     clearTimeout(blinkEndTimer);
-    clearInterval(sequenceTimer);
-  } else if (pet.dataset.state === 'idle') scheduleBlink();
+  } else if (pet.dataset.state !== 'sleep') scheduleBlink();
   else if (!isSleeping) setState('idle');
 });
 reducedMotion?.addEventListener?.('change', () => setState(isSleeping ? 'sleep' : 'idle'));
