@@ -1,4 +1,4 @@
-import { notes } from './content.js?v=lucky-pixel-2';
+import { notes } from './content.js?v=lucky-cozy-1';
 
 const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia?.('(hover: hover) and (pointer: fine)');
@@ -57,7 +57,7 @@ function cover() {
     <p class="cover-edition">THE LITTLE ALBUM · 2026</p><h2 class="cover-title">Lucky<span>的日常</span></h2><p class="cover-description">有 Lucky 的普通日子。</p>
     <button class="cover-open" type="button" data-book-action="open">翻开相册</button><button class="cover-skip" type="button" data-book-action="skip">直接浏览</button><a class="cover-character-link" href="#/character">认识画里的 Lucky <span aria-hidden="true">↗</span></a>
     <p class="cover-count">${number(notes.length)} 个片段 · ${number(videoCount)} 段视频 · ${number(photoCount)} 张照片</p>
-    </div><div class="cover-collage" aria-hidden="true"><div class="cover-photo cover-photo-main"><img src="${portrait.photo}" alt="" width="${portrait.width}" height="${portrait.height}" draggable="false"><span>hello, Lucky.</span></div><div class="cover-photo cover-photo-character"><img src="assets/lucky-pixel-idle.png?v=2" alt="" width="1284" height="1225" draggable="false"><span>像素 Lucky</span></div></div>
+    </div><div class="cover-collage" aria-hidden="true"><div class="cover-photo cover-photo-main"><img src="${portrait.photo}" alt="" width="${portrait.width}" height="${portrait.height}" draggable="false"><span>hello, Lucky.</span></div><div class="cover-photo cover-photo-character"><img src="assets/lucky-cozy-idle.png" alt="" width="1284" height="1225" draggable="false"><span>像素 Lucky</span></div></div>
     </div></div>`;
 }
 
@@ -68,7 +68,7 @@ export function renderAlbum() {
   const visible=items.slice(page*4,page*4+4);
   return `<section class="album-experience" aria-label="Lucky 的贴纸相册">
     <div class="album-heading"><div><p class="eyebrow">A LITTLE COLLECTION</p><h1>Lucky 的小相册</h1></div><span class="album-total">${videoCount} 段视频 · ${photoCount} 张照片</span></div>
-    <a class="character-teaser" href="#/character"><span class="character-teaser-art"><img src="assets/lucky-pixel-hello.png?v=2" alt="" width="1284" height="1225"></span><span class="character-teaser-copy"><strong>像素 Lucky</strong><span>认识三花小姑娘的像素形象</span></span><span class="character-teaser-arrow" aria-hidden="true">↗</span></a>
+    <a class="character-teaser" href="#/character"><span class="character-teaser-art"><img src="assets/lucky-cozy-hello.png" alt="" width="1284" height="1225"></span><span class="character-teaser-copy"><strong>像素 Lucky</strong><span>认识三花小姑娘的像素形象</span></span><span class="character-teaser-arrow" aria-hidden="true">↗</span></a>
     <div class="chapter-tabs" role="group" aria-label="相册章节">${chapters.map((item,index)=>`<button type="button" class="chapter-tab" data-chapter="${item.id}" aria-pressed="${item.id===chapter}"><span class="chapter-index">${number(index)}</span>${escape(item.name)}</button>`).join('')}</div>
     <div class="book-stage ${opened?'is-open':'is-closed'} ${opening?'is-opening':''}" tabindex="0" aria-label="相册第 ${page+1} 页，共 ${pages} 页，使用方向键翻页">
       <div class="book-spread" ${opened?'':'inert aria-hidden="true"'}>${bookPage(visible.slice(0,2),'left')}${bookPage(visible.slice(2),'right')}</div>
