@@ -72,6 +72,9 @@ jobs:
           const clip = { x: 0, y: Math.max(0, petBox.y - 8), width: 236, height: 220 };
           await closePage.screenshot({ path: 'qa/after-pet-idle-closeup.png', clip, scale: 'device' });
           await closePage.locator('.lucky-pet').evaluate(el => el.classList.add('is-blinking'));
+          await closePage.waitForTimeout(100);
+          const blinkOpacity = await closePage.locator('.lucky-pet-blink').first().evaluate(el => Number(getComputedStyle(el).opacity));
+          if (blinkOpacity < .99) throw new Error('Eye blink layer did not become visible');
           await closePage.screenshot({ path: 'qa/after-pet-blink-closeup.png', clip, scale: 'device' });
           await closePage.locator('.lucky-pet').evaluate(el => el.classList.remove('is-blinking'));
           await closePage.locator('.lucky-pet-character').click();
