@@ -1,5 +1,5 @@
-import { site, notes } from './content.js?v=lucky-pixel-1';
-import { renderAlbum, mountAlbum, destroyAlbum } from './album.js?v=lucky-pixel-1';
+import { site, notes } from './content.js?v=lucky-pixel-2';
+import { renderAlbum, mountAlbum, destroyAlbum } from './album.js?v=lucky-pixel-2';
 
 const main = document.querySelector('main');
 const dialog = document.querySelector('.lightbox');
@@ -15,9 +15,9 @@ const albumCount = `${String(notes.filter(note => note.video).length).padStart(2
 
 function renderCharacter() {
   return `<section class="character-view" aria-labelledby="character-title">
-    <div class="character-hero"><div class="character-copy"><p class="character-kicker">LUCKY / PIXEL PORTRAIT</p><h1 id="character-title">Lucky 的<br>像素模样</h1><p class="character-lead">三个月大的三花小姑娘，奶白色的长毛间藏着烟灰与浅杏。照着她的照片，一格一格留下圆眼睛、粉鼻子，还有那条长长的蓬松尾巴。</p><ul class="character-traits" aria-label="Lucky 的特征"><li>三个月</li><li>母三花</li><li>长尾巴</li></ul><a class="character-back" href="#/">回到相册 <span aria-hidden="true">↗</span></a></div><figure class="character-portrait"><img src="assets/lucky-pixel-idle.png" alt="Lucky 本猫的像素形象：四脚站着的长毛小三花，奶白色为主，带烟灰和浅杏斑块、粉色鼻子，完整的灰尖蓬松长尾巴向上弯起" width="1284" height="1225"><figcaption>根据 Lucky 照片创作的像素小猫</figcaption></figure></div>
+    <div class="character-hero"><div class="character-copy"><p class="character-kicker">LUCKY / PIXEL PORTRAIT</p><h1 id="character-title">Lucky 的<br>像素模样</h1><p class="character-lead">三个月大的三花小姑娘，奶白色的长毛间藏着烟灰与浅杏。照着她的照片，一格一格留下圆眼睛、粉鼻子，还有那条长长的蓬松尾巴。</p><ul class="character-traits" aria-label="Lucky 的特征"><li>三个月</li><li>母三花</li><li>长尾巴</li></ul><a class="character-back" href="#/">回到相册 <span aria-hidden="true">↗</span></a></div><figure class="character-portrait"><img src="assets/lucky-pixel-idle.png?v=2" alt="Lucky 本猫的像素形象：四脚站着的长毛小三花，奶白色为主，带烟灰和浅杏斑块、粉色鼻子，完整的灰尖蓬松长尾巴向上弯起" width="1284" height="1225"><figcaption>根据 Lucky 照片创作的像素小猫</figcaption></figure></div>
     <div class="character-origin"><div class="character-origin-photos"><figure><img src="assets/lucky-photo-03.jpg" alt="真实的 Lucky 仰面躺着，露出粉色鼻子与毛茸茸的爪子" width="719" height="1280" loading="lazy"><figcaption>圆脸和小爪爪</figcaption></figure><figure><img src="assets/lucky-photo-09.jpg" alt="真实的 Lucky 站在桌边，可以看到身上的三花斑块和长尾巴" width="720" height="1280" loading="lazy"><figcaption>三花与长尾巴</figcaption></figure></div><div class="character-origin-copy"><p class="character-kicker">A LITTLE BIT OF LUCKY</p><h2>一眼就认得出你</h2><p>奶白色绒毛、灰色耳尖与背上的浅杏斑块，都从 Lucky 的照片里仔细找来。像素形象保留四脚幼猫的模样，也把灰尖长尾巴完整画了出来。</p><a href="#/notes">去看 Lucky 的真实日常 <span aria-hidden="true">↗</span></a></div></div>
-    <div class="character-stickers"><div class="character-stickers-heading"><p class="character-kicker">LUCKY / PIXEL MOMENTS</p><h2>Lucky 的像素小表情</h2><p>抬抬爪，再打个小盹。</p></div><div class="character-sticker-grid"><figure><img src="assets/lucky-pixel-hello.png" alt="像素小三花 Lucky 抬起一只前爪，蓬松的长尾巴露在身旁" loading="lazy"><figcaption>你好呀</figcaption></figure><figure><img src="assets/lucky-pixel-sleep.png" alt="像素小三花 Lucky 闭眼蜷卧，灰尖长尾巴蜷在身边" loading="lazy"><figcaption>困困啦</figcaption></figure></div></div>
+    <div class="character-stickers"><div class="character-stickers-heading"><p class="character-kicker">LUCKY / PIXEL MOMENTS</p><h2>Lucky 的像素小表情</h2><p>抬抬爪，再打个小盹。</p></div><div class="character-sticker-grid"><figure><img src="assets/lucky-pixel-hello.png?v=2" alt="像素小三花 Lucky 抬起一只前爪，蓬松的长尾巴露在身旁" loading="lazy"><figcaption>你好呀</figcaption></figure><figure><img src="assets/lucky-pixel-sleep.png?v=2" alt="像素小三花 Lucky 闭眼蜷卧，灰尖长尾巴蜷在身边" loading="lazy"><figcaption>困困啦</figcaption></figure></div></div>
   </section>`;
 }
 

@@ -2,11 +2,11 @@
 // and whether the visitor chose to keep the widget visible or quiet.
 const STORAGE_KEY = 'lucky-web-pet-v1';
 const SPRITES = Object.freeze({
-  idle: 'assets/lucky-pixel-idle.png',
-  blink: 'assets/lucky-pixel-blink.png',
-  hello: 'assets/lucky-pixel-hello.png',
-  play: 'assets/lucky-pixel-play.png',
-  sleep: 'assets/lucky-pixel-sleep.png'
+  idle: 'assets/lucky-pixel-idle.png?v=2',
+  blink: 'assets/lucky-pixel-blink.png?v=2',
+  hello: 'assets/lucky-pixel-hello.png?v=2',
+  play: 'assets/lucky-pixel-play.png?v=2',
+  sleep: 'assets/lucky-pixel-sleep.png?v=2'
 });
 let saved = {};
 try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { /* Storage can be unavailable. */ }
